@@ -1,0 +1,56 @@
+class FileManager:
+    def __init__(self, filename):
+        """
+        Конструктор класса FileManager.
+        
+        :param filename: Имя файла, с которым будем работать.
+        """
+        self.filename = filename
+        # Атрибут file пока пуст, файл откроется позже в __enter__
+        self.file = None
+
+    def write(self, text):
+        """
+        Метод записи строки в файл.
+        
+        :param text: Строка, которую нужно записать в файл.
+        """
+        if not isinstance(text, str):
+            raise TypeError("Метод write ожидает строковый аргумент.")
+        # Запись строки в файл
+        self.file.write(text)
+    
+    def __enter__(self):
+        """
+        Магический метод, открывающий файл на запись.
+        Этот метод вызывается автоматически при входе в блок `with`.
+        """
+        try:
+            # Открываем файл на запись ('w' режим перезаписи).
+            self.file = open(self.filename, 'w', encoding='utf-8')
+        except Exception as e:
+            print(f"Произошла ошибка открытия файла {self.filename}: {e}")
+            return None
+        else:
+            # Возвращаем экземпляр самого себя, чтобы доступ к нему был внутри блока `with`
+            return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        Магический метод, закрываюший файл.
+        Этот метод вызывается автоматически при выходе из блока `with`, даже если произошла ошибка.
+        
+        :param exc_type: Тип исключения, если оно возникло.
+        :param exc_val: Значение исключения.
+        :param exc_tb: Трассировка стека (traceback), если исключение произошло.
+        """
+        if self.file is not None:
+            # Закрытие открытого файла.
+            self.file.close()
+            
+
+# Использование класса FileManager с менеджером контекста (`with`)
+if __name__ == "__main__":
+    with FileManager('test.txt') as fm:
+        # Записываем текст в файл
+        fm.write('Hello, World\n')
