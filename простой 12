@@ -1,0 +1,108 @@
+class Stack:
+    def __init__(self):
+        self.tasks = []
+
+    def push(self, task):
+        self.tasks.append(task)
+
+    def pop(self):
+        if not self.is_empty():
+            return self.tasks.pop()
+        else:
+            print("Нет активных задач.")
+
+    def is_empty(self):
+        return len(self.tasks) == 0
+
+    def show_tasks(self):
+        if not self.is_empty():
+            for i, task in enumerate(reversed(self.tasks)):
+                print(f"{i + 1}. {task}")
+        else:
+            print("Список задач пуст.")
+
+
+class Queue:
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, person):
+        self.queue.append(person)
+
+    def dequeue(self):
+        if not self.is_empty():
+            return self.queue.pop(0)
+        else:
+            print("Очередь пуста.")
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def show_queue(self):
+        if not self.is_empty():
+            for i, person in enumerate(self.queue):
+                print(f"{i + 1}. {person}")
+        else:
+            print("Очередь пуста.")
+
+
+def main():
+    stack = Stack()
+    queue = Queue()
+
+    while True:
+        action = input("\nВыберите действие:\n1. Использовать стек\n2. Использовать очередь\n3. Выход\n")
+
+        if action == '1':
+            while True:
+                choice = input(
+                    "\nЧто сделать со стеком?\n1. Добавить задачу\n2. Выполнить последнюю задачу\n3. Показать текущие задачи\n4. Назад\n")
+
+                if choice == '1':
+                    task = input("Введите название задачи: ")
+                    stack.push(task)
+
+                elif choice == '2':
+                    removed_task = stack.pop()
+                    if removed_task:
+                        print(f"Таск '{removed_task}' выполнен.")
+
+                elif choice == '3':
+                    stack.show_tasks()
+
+                elif choice == '4':
+                    break
+                else:
+                    print("Некорректный выбор!")
+
+        elif action == '2':
+            while True:
+                choice = input(
+                    "\nЧто сделать с очередью помощи?\n1. Добавить участника\n2. Получить помощь первому участнику\n3. Показать текущих участников\n4. Назад\n")
+
+                if choice == '1':
+                    name = input("Введите имя участника: ")
+                    queue.enqueue(name)
+
+                elif choice == '2':
+                    helped_person = queue.dequeue()
+                    if helped_person:
+                        print(f"Помощь оказана участнику '{helped_person}'.")
+
+                elif choice == '3':
+                    queue.show_queue()
+
+                elif choice == '4':
+                    break
+                else:
+                    print("Некорректный выбор!")
+
+        elif action == '3':
+            print("Завершение программы...")
+            break
+        else:
+            print("Ошибка выбора, попробуйте снова.")
+
+
+if __name__ == "__main__":
+    main()
